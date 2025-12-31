@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adrija Reaction Time Game</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+  }
+
+  h1 {
+    margin-top: 20px;
+  }
+
+  #info {
+    font-size: 20px;
+    margin: 10px;
+  }
+
+  #gameArea {
+    width: 500px;
+    height: 350px;
+    border: 3px solid white;
+    margin: 20px auto;
+    position: relative;
+    background-color: #111;
+  }
+
+  .target {
+    width: 50px;
+    height: 50px;
+    background-color: #ff4757;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    background-color: #ff4757;
+    color: white;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>⚡ Adrija Reaction Time Game ⚡</h1>
+<div id="info">
+  Score: <span id="score">0</span> |
+  Time: <span id="time">30</span>s
+</div>
+
+<div id="gameArea"></div>
+
+<button onclick="startGame()">Start Game</button>
+
+<script>
+  let score = 0;
+  let timeLeft = 30;
+  let timer;
+  let targetTimer;
+
+  const gameArea = document.getElementById("gameArea");
+  const scoreText = document.getElementById("score");
+  const timeText = document.getElementById("time");
+
+  function startGame() {
+    score = 0;
+    timeLeft = 30;
+    scoreText.textContent = score;
+    timeText.textContent = timeLeft;
+    gameArea.innerHTML = "";
+
+    timer = setInterval(() => {
+      timeLeft--;
+      timeText.textContent = timeLeft;
+      if (timeLeft <= 0) endGame();
+    }, 1000);
+
+    spawnTarget();
+  }
+
+  function spawnTarget() {
+    if (timeLeft <= 0) return;
+
+    gameArea.innerHTML = "";
+    const target = document.createElement("div");
+    target.className = "target";
+
+    const maxX = gameArea.clientWidth - 50;
+    const maxY = gameArea.clientHeight - 50;
+
+    target.style.left = Math.random() * maxX + "px";
+    target.style.top = Math.random() * maxY + "px";
+
+    target.onclick = () => {
+      score++;
+      scoreText.textContent = score;
+      spawnTarget();
+    };
+
+    gameArea.appendChild(target);
+  }
+
+  function endGame() {
+    clearInterval(timer);
+    gameArea.innerHTML = "";
+    alert("Game Over! Your score: " + score);
+  }
+</script>
+
+</body>
+</html>
